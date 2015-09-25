@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'stencil'
+
+def help
+  %Q(
+  Usage: stencil [COMMAND] [OPTIONS]
+  Commands:
+    help                Prints this help document
+    version             Prints the stencil gem version
+  Options:
+    -h, --help          Prints this help document
+    -v, --version       Prints the siteleaf gem version
+  See https://github.com/xxix/stencil for additional documentation.
+  )
+end
+
+case ARGV[0]
+when '-v', '--version', 'version'
+  puts Stencil::VERSION
+when '-h', '--help', 'help'
+  puts help
+else
+  puts "`#{ARGV[0]}` command not found.\n"
+  puts help
+end
