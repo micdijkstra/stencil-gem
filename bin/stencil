@@ -15,11 +15,15 @@ def help
   )
 end
 
+def watch
+  sassc --watch ./assets/stylesheets/application.scss --style compressed
+end
+
 case ARGV[0]
 when '-v', '--version', 'version'
   puts Stencil::VERSION
 when '-h', '--help', 'help'
-  puts help
+  Stencil::Watcher.sass
 else
   puts "`#{ARGV[0]}` command not found.\n"
   puts help
