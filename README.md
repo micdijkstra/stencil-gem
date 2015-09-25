@@ -5,7 +5,7 @@ Compiler to help you get started building a new web site, web application or HTM
 ## Installation
 
 ```
-gem install stencil
+gem install stencil-ruby
 ```
 
 ### Usage
