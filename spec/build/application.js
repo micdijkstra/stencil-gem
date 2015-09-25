@@ -1,0 +1,1 @@
+function library(){console.log("library")}function script(){console.log("script")}

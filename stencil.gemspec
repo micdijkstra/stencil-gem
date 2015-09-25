@@ -8,19 +8,27 @@ Gem::Specification.new do |spec|
   spec.version       = Stencil::VERSION
   spec.authors       = ["Michael Dijkstra"]
   spec.email         = ["michael@xxix.co"]
-  spec.summary       = "A workflow gem by XXIX"
+  spec.summary       = "A workflow gem"
   spec.description   = "Compilers to help you get started building a new web site, web application or HTML email fast."
   spec.homepage      = "https://github.com/xxix/stencil"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
-  #spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.executables   = ['stencil']
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'sassc'
+  spec.add_dependency 'filewatcher'
+  spec.add_dependency 'liquid'
+  spec.add_dependency 'autoprefixer-rails'
+  spec.add_dependency 'premailer'
+  spec.add_dependency 'nokogiri', '>= 1.4.4'
+  spec.add_dependency 'sass_paths'
+  spec.add_dependency 'webrick'
+  spec.add_dependency 'uglifier'
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rspec"
 end

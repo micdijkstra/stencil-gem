@@ -2,10 +2,29 @@
 
 require 'stencil'
 
+class NonCachingFileHandler < WEBrick::HTTPServlet::FileHandler
+  def prevent_caching(res)
+    res['ETag']          = nil
+    res['Last-Modified'] = Time.now + 100**4
+    res['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+    res['Pragma']        = 'no-cache'
+    res['Expires']       = Time.now - 100**4
+  end
+
+  def do_GET(req, res)
+    super
+    prevent_caching(res)
+  end
+end
+
 def help
   %Q(
   Usage: stencil [COMMAND] [OPTIONS]
   Commands:
+    bootstrap           Create the required folders in the current directory
+    build               Renders HTML and CSS into the build directory
+    watch               Watches for changes to SCSS and Liquid files and builds them
+    inline              Inlines the CSS in all HTML files in the build directory
     help                Prints this help document
     version             Prints the stencil gem version
   Options:
@@ -15,15 +34,72 @@ def help
   )
 end
 
-def watch
-  sassc --watch ./assets/stylesheets/application.scss --style compressed
+def build
+  render_sass
+  render_javascript
+  render_liquid
+end
+
+def render_inline
+  puts Stencil.inline('build/')
+end
+
+def render_javascript
+  puts Stencil.javascript('assets/javascripts/')
+end
+
+def render_liquid
+  puts Stencil.liquid('templates/')
+end
+
+def render_sass
+  puts Stencil.sass('assets/stylesheets/')
 end
 
 case ARGV[0]
 when '-v', '--version', 'version'
   puts Stencil::VERSION
 when '-h', '--help', 'help'
-  Stencil::Watcher.sass
+  puts help
+when 'bootstrap'
+  puts "Bootstrapping environment!"
+  system 'mkdir', '-p', 'build'
+  system 'mkdir', '-p', 'templates'
+  system 'mkdir', '-p', 'assets/stylesheets'
+  system 'mkdir', '-p', 'assets/javascripts'
+when 'watch'
+  puts "Starting server!"
+
+  server = WEBrick::HTTPServer.new Port: 3000, BindAddress: "localhost"
+  directory = Dir.pwd + '/build'
+  server.mount "/", NonCachingFileHandler, directory
+  trap("INT") { server.shutdown }
+  pid = Process.fork { server.start }
+  Process.detach(pid)
+  puts "Server detached with pid '#{pid}'.", "Run `pkill -f stencil' or `kill -9 #{pid}' to stop the server."
+
+  puts "Compiling files!"
+  build
+
+  puts "Opening server …"
+  system 'open http://localhost:3000/index.html'
+
+  puts "Starting watcher!"
+  FileWatcher.new('./').watch do |filename|
+    if filename.include?('.scss')
+      puts render_sass
+    elsif filename.include?('.js')
+      puts render_javascript
+    elsif filename.include?('.liquid')
+      puts render_liquid
+    end
+  end
+when 'inline'
+  puts "Starting inliner!"
+  render_inline
+when 'build'
+  puts "Starting compiler!"
+  build
 else
   puts "`#{ARGV[0]}` command not found.\n"
   puts help
