@@ -23,6 +23,7 @@ def help
   Commands:
     bootstrap           Create the required folders in the current directory
     build               Renders HTML and CSS into the build directory
+    new                 Creates a new folder with the latest version of stencil
     watch               Watches for changes to SCSS and Liquid files and builds them
     inline              Inlines the CSS in all HTML files in the build directory
     help                Prints this help document
@@ -100,6 +101,15 @@ when 'inline'
 when 'build'
   puts "Starting compiler!"
   build
+when 'new'
+  if ARGV[1]
+    system "git clone --depth=1 --branch=master git@github.com:micdijkstra/stencil.git #{ARGV[1]}"
+    puts "Setting up your new Stencil project…"
+    system "rm -rf #{ARGV[1]}/.git"
+    puts "… complete!"
+  else
+    puts "Please enter a directory name for your new Stencil project"
+  end
 else
   puts "`#{ARGV[0]}` command not found.\n"
   puts help

@@ -10,12 +10,11 @@ gem install stencil-ruby
 
 ### Usage
 
-1. Download the latest version of [Stencil](https://github.com/micdijkstra/stencil)
-2. cd into the directory
-3. Run `stencil bootstrap`
-4. Run `stencil watch`
-5. …
-6. Count cash!
+1. Run `stencil new your-project-name`
+2. Cd into your-project-name
+3. Run `stencil watch`
+4. …
+5. Count cash!
 
 Run `stencil help` for a full list of commands.
 
