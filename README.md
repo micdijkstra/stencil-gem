@@ -8,9 +8,36 @@ Compiler to help you get started building a new web site, web application or HTM
 gem install stencil-ruby
 ```
 
-### Usage
+## Commands
 
+### Build
+
+Renders HTML and CSS into the build directory
+ 
+Command: `stencil build`
+
+### Watch
+
+Watches for changes to files and compiles them. Serves the build folder at
+`http://localhost:3000/`
+ 
+Command: `stencil watch`
+
+### New
+
+Creates a new folder with the latest version of stencil
+ 
+Command: `stencil new project-name`
+
+### Inline
+
+Inlines the CSS in all email files in the build directory (prefixed by `email-`)
+ 
+Command: `stencil inline`
+ 
 Run `stencil help` for a full list of commands.
+
+## Getting Started
 
 #### New Project
 
