@@ -134,6 +134,12 @@ using the `stencil inline` command.
 2. Run `bundle`
 3. Run `rake install`
 
+## Publishing
+
+1. Update the version number in `lib/stencil/version.rb`
+2. Run `gem build stencil.gemspec`
+3. Run `gem push stencil-ruby-0.0.X.gem`
+
 ## Contributing
 
 1. Fork it ( https://github.com/micdijkstra/stencil/fork )
