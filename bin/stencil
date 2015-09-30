@@ -50,7 +50,8 @@ def render_javascript
 end
 
 def render_liquid
-  puts Stencil.liquid('templates/')
+  puts Stencil.templates('templates/')
+  puts Stencil.emails('emails/')
 end
 
 def render_sass

@@ -10,13 +10,88 @@ gem install stencil-ruby
 
 ### Usage
 
+Run `stencil help` for a full list of commands.
+
+#### New Project
+
 1. Run `stencil new your-project-name`
 2. Cd into your-project-name
 3. Run `stencil watch`
 4. …
 5. Count cash!
 
-Run `stencil help` for a full list of commands.
+#### Existing Project
+
+1. Ensure you have the correct folder structure (see below)
+2. Run `stencil watch`
+3. …
+4. Count cash!
+
+## How it works
+
+Stencil is created for a very specific workflow. Everything is compiled flat
+into the `build` folder to allow easy transportation or deployment to almost
+any environment.
+
+### Folder Structure
+
+```text
+project
+├── assets
+│   ├── stylesheets
+│   │ └── application.scss
+│   └── javascripts
+│     └── lib
+│
+├── build
+│
+├── templates
+│
+└── emails
+```
+
+### Assets
+
+#### Stylesheets
+
+Stencil looks for an `application.scss` file inside `assets/stylesheets` and
+compiles this to `build/application.css`.
+
+#### JavaScript
+
+Stencil will combine and minify everything inside the `assets/javascripts` folder into `build/application.js`.
+ 
+Sub folders will be compiled first and everything is sorted in alphabetical
+order.
+
+### Build
+
+The build directory is where all compiled files are saved.
+
+### Templates
+
+Templates should include liquid files which are compiled into the `build/`
+folder.
+ 
+Stencil will look for a layout file at `templats/_layout.liquid` and compile
+every template inside this file.
+ 
+You can include liquid partials saved in the `templates` folder using the standard liquid `{% include 'file' %}` tags.
+
+### Emails
+
+Emails should include liquid files which are compiled into the `build/` folder.
+Emails will automatically be appended with `email-` when they are compiled.
+ 
+Any file in the `build` directory prefixed with `email-` will be inlined when
+using the `stencil inline` command.
+
+## Help
+
+### Server stuck?
+
+1. Run `lsof -wni tcp:3000`
+2. Run `kill -9 PID` (where the PID is from the output above)
 
 ## Building Locally
 
@@ -31,8 +106,3 @@ Run `stencil help` for a full list of commands.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
-
-## Server stuck?
-
-1. Run `lsof -wni tcp:3000`
-2. Run `kill -9 PID` (where the PID is from the output above)

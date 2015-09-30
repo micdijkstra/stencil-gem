@@ -55,16 +55,26 @@ module Stencil
     end
   end
 
-  def self.liquid folder
+  def self.emails folder
+    self.liquid folder, 'emails/', 'build/email-'
+  end
+
+  def self.templates folder
+    self.liquid folder, 'templates', 'build'
+  end
+
+  def self.liquid folder, source, destination
     begin
       Liquid::Template.file_system = Liquid::LocalFileSystem.new(folder)
       Dir.glob(folder + '*.liquid') do |path|
         next if path =~ /\_/ # do not render partials
         begin
+          layout_file = File.open(folder + '_layout.liquid').read
+          layout = Liquid::Template.parse(layout_file)
           file = File.open(path).read
           liquid = Liquid::Template.parse(file)
-          output_filename = path.gsub('liquid', 'html').gsub('templates', 'build')
-          File.open(output_filename, 'w') { |file| file.write(liquid.render) }
+          output_filename = path.gsub('liquid', 'html').gsub(source, destination)
+          File.open(output_filename, 'w') { |file| file.write(layout.render('content_for_layout' => liquid.render)) }
         rescue => e
           puts "Liquid error: #{e}"
         end
@@ -79,11 +89,10 @@ module Stencil
     begin
       Liquid::Template.file_system = Liquid::LocalFileSystem.new(folder)
       Dir.glob(folder + '*.html') do |path|
-        next if path.include? '-inline.html'
         begin
+          next unless path.include?('email-').inspect
           premailer = Premailer.new(path, warn_level: Premailer::Warnings::SAFE)
-          output_filename = path.gsub('.html', '-inline.html')
-          File.open(output_filename, 'w') { |file| file.write(premailer.to_inline_css) }
+          File.open(path, 'w') { |file| file.write(premailer.to_inline_css) }
 
           # Output any CSS warnings
           premailer.warnings.each do |w|
