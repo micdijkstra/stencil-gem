@@ -23,6 +23,7 @@ def help
   Commands:
     bootstrap           Create the required folders in the current directory
     build               Renders HTML and CSS into the build directory
+    deploy              Deploys the build folder to gh-pages
     new                 Creates a new folder with the latest version of stencil
     watch               Watches for changes to SCSS and Liquid files and builds them
     inline              Inlines the CSS in all HTML files in the build directory
@@ -102,6 +103,8 @@ when 'inline'
 when 'build'
   puts "Starting compiler!"
   build
+when 'deploy'
+  system "git subtree push --prefix build #{ARGV[1] || 'origin'} gh-pages"
 when 'new'
   if ARGV[1]
     system "git clone --depth=1 --branch=master git@github.com:micdijkstra/stencil.git #{ARGV[1]}"

@@ -37,6 +37,14 @@ Command: `stencil inline`
  
 Run `stencil help` for a full list of commands.
 
+### Deploy
+
+Deploys the build folder to gh-pages. You can optionally pass through a
+different remote, the default is origin.
+
+ 
+Command: `stencil deploy`
+
 ## Getting Started
 
 #### New Project
